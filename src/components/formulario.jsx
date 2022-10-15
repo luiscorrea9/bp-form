@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import {db} from "../firebase"
-import { collection, addDoc, deleteDoc, doc, onSnapshot} from 'firebase/firestore';
+import { collection, addDoc, deleteDoc, doc, onSnapshot, updateDoc} from 'firebase/firestore';
+
 
 const Formulario = () => {
 
@@ -86,6 +87,40 @@ const Formulario = () => {
 
   } 
 
+  const editUser = async e => {
+      e.preventDefault();
+      try{
+           const docRef = doc(db, "formulario", id);
+           await updateDoc(docRef, {
+            infoName: name,
+            infoLastname: lastname,
+            infoAge: age,
+            infoEmail: email,
+            infoPhone: phone,
+            infoCountry: country,
+            infoLocation: location 
+           })
+           const newArray = lista.map(
+            item => item.id === id ? {id: id, infoName: name, infoLastname: lastname, infoAge: age, infoEmail: email, infoPhone: phone, infoCountry: country, infoLocation: location} : item
+           )
+
+           setLista(newArray);
+           setName("");
+           setLastname("");
+           setAge("");
+           setEmail("");
+           setPhone("");
+           setCountry("");
+           setLocation("");
+           setId("");
+           setEditingMode(false);
+
+      }catch(error){
+        console.log(error);
+      }
+
+  }
+
   const cancel = () =>{
     setEditingMode(false);
     setName("");
@@ -113,7 +148,7 @@ const Formulario = () => {
           }
         </h2>
 
-        <form onSubmit={saveList}>
+        <form onSubmit={editingMode ? editUser : saveList}>
 
           <input type="text"
           className='form-control mb-2'
@@ -167,8 +202,8 @@ const Formulario = () => {
           {
             editingMode ? 
             (
-            <><button className=" btn btn-warning btn-lg" type="submit">Editar</button>
-            <button className=" btn btn-dark btn-lg mx-2" onClick={() =>cancel()}>Cancelar</button></> )
+            <><button className=" btn btn-warning btn-lg" type="submit">Edit</button>
+            <button className=" btn btn-dark btn-lg mx-2" onClick={() =>cancel()}>Cancel</button></> )
             : <button className=" btn btn-primary btn-lg" type="submit">Add</button>
           }
           
@@ -188,9 +223,9 @@ const Formulario = () => {
                 <li key={item.id} className="list-group-item">
                   <span className='lead'>{item.infoName}-{item.infoLastname}-{item.infoAge}-{item.infoEmail}-{item.infoCountry}-{item.infoLocation}-{item.infoPhone}</span>
                   <button className='btn btn-danger btn-lg float-end mx-2'
-                  onClick={() => eliminar(item.id)}>Eliminar</button>
+                  onClick={() => eliminar(item.id)}>Delete</button>
                   <button className='btn btn-warning btn-lg float-end mx-2'
-                  onClick={() => edit(item)}>Editar</button>
+                  onClick={() => edit(item)}>Edit</button>
                 </li>
               ))
 
