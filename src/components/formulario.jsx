@@ -32,6 +32,8 @@ const Formulario = () => {
        obtenerDatos();  
     },[])
 
+    
+
 
    const saveList = async (e) => {
         e.preventDefault()
@@ -72,6 +74,11 @@ const Formulario = () => {
       console.log(error);
     } 
    }
+   
+
+  
+  const imagen = `https://picsum.photos/50`;
+  const text = "Imagen";
 
 
   const edit = item =>{
@@ -134,6 +141,7 @@ const Formulario = () => {
     
   }
    
+
 
     return (
     <div className="container mt-5">
@@ -221,7 +229,8 @@ const Formulario = () => {
           {
               lista.map(item => (
                 <li key={item.id} className="list-group-item">
-                  <span className='lead'>{item.infoName}-{item.infoLastname}-{item.infoAge}-{item.infoEmail}-{item.infoCountry}-{item.infoLocation}-{item.infoPhone}</span>
+                  <span className='lead'>{item.infoName}-{item.infoLastname}-{item.infoAge}-{item.infoEmail}-{item.infoCountry}-{item.infoLocation}-{item.infoPhone}- </span>
+                  <img src={imagen} alt={text} />
                   <button className='btn btn-danger btn-lg float-end mx-2'
                   onClick={() => eliminar(item.id)}>Delete</button>
                   <button className='btn btn-warning btn-lg float-end mx-2'
